@@ -32,7 +32,7 @@ A clean, modern Tic-Tac-Toe game with instant interactions, smart win detection,
 ## 🚀 Quick Start
 
 ```bash
-git clone <YOUR_REPO_URL>
+git clone https://github.com/debugfest/tic-tac-toe.git
 cd tic-tac-toe
 
 # install deps
@@ -85,11 +85,7 @@ npm run lint      # Run linting (if configured)
 
 Contributions are welcome! Please open an issue or pull request with improvements, new features (e.g., AI opponent, themes), or fixes.
 
-## 📄 License
 
-This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.
-
----
 
 <div align="center">
 
