@@ -1,8 +1,17 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Board as BoardType, Player, checkWinner, checkDraw, getBestMove, makeRandomMove, WINNING_COMBINATIONS } from '../utils/gameLogic';
+import {
+  Board as BoardType,
+  Player,
+  checkWinner,
+  checkDraw,
+  getBestMove,
+  makeRandomMove,
+  WINNING_COMBINATIONS,
+} from '../utils/gameLogic';
 import { Board } from './Board';
 import { Status } from './Status';
 import { RotateCcw, Users, Bot } from 'lucide-react';
+import { ThemeSwitcher } from './ThemeSwitcher';
 
 type GameMode = 'pvp' | 'ai';
 type AIDifficulty = 'easy' | 'hard';
@@ -34,35 +43,39 @@ export const Game = () => {
     setWinningLine([]);
   }, []);
 
-  const handleSquareClick = useCallback((index: number) => {
-    if (board[index] || winner || isDraw) return;
-    if (gameMode === 'ai' && currentPlayer === 'O') return;
+  const handleSquareClick = useCallback(
+    (index: number) => {
+      if (board[index] || winner || isDraw) return;
+      if (gameMode === 'ai' && currentPlayer === 'O') return;
 
-    const newBoard = [...board];
-    newBoard[index] = currentPlayer;
-    setBoard(newBoard);
+      const newBoard = [...board];
+      newBoard[index] = currentPlayer;
+      setBoard(newBoard);
 
-    const gameWinner = checkWinner(newBoard);
-    if (gameWinner) {
-      setWinner(gameWinner);
-      setWinningLine(getWinningLine(newBoard));
-      return;
-    }
+      const gameWinner = checkWinner(newBoard);
+      if (gameWinner) {
+        setWinner(gameWinner);
+        setWinningLine(getWinningLine(newBoard));
+        return;
+      }
 
-    if (checkDraw(newBoard)) {
-      setIsDraw(true);
-      return;
-    }
+      if (checkDraw(newBoard)) {
+        setIsDraw(true);
+        return;
+      }
 
-    setCurrentPlayer(currentPlayer === 'X' ? 'O' : 'X');
-  }, [board, currentPlayer, winner, isDraw, gameMode, getWinningLine]);
+      setCurrentPlayer(currentPlayer === 'X' ? 'O' : 'X');
+    },
+    [board, currentPlayer, winner, isDraw, gameMode, getWinningLine]
+  );
 
   useEffect(() => {
     if (gameMode === 'ai' && currentPlayer === 'O' && !winner && !isDraw) {
       const timer = setTimeout(() => {
-        const aiMove = aiDifficulty === 'hard'
-          ? getBestMove([...board], 'O')
-          : makeRandomMove([...board]);
+        const aiMove =
+          aiDifficulty === 'hard'
+            ? getBestMove([...board], 'O')
+            : makeRandomMove([...board]);
 
         const newBoard = [...board];
         newBoard[aiMove] = 'O';
@@ -85,7 +98,15 @@ export const Game = () => {
 
       return () => clearTimeout(timer);
     }
-  }, [gameMode, currentPlayer, board, winner, isDraw, aiDifficulty, getWinningLine]);
+  }, [
+    gameMode,
+    currentPlayer,
+    board,
+    winner,
+    isDraw,
+    aiDifficulty,
+    getWinningLine,
+  ]);
 
   const switchGameMode = (mode: GameMode) => {
     setGameMode(mode);
@@ -93,12 +114,16 @@ export const Game = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-200 py-8 px-4">
+    <div className="min-h-screen bg-background text-primary-text py-8 px-4 transition-colors duration-300">
       <div className="max-w-2xl mx-auto space-y-6">
         <div className="text-center space-y-2">
-          <h1 className="text-5xl font-bold text-slate-800">Tic Tac Toe</h1>
-          <p className="text-slate-600">Challenge a friend or test your skills against AI</p>
+          <h1 className="text-5xl font-bold">Tic Tac Toe</h1>
+          <p className="text-secondary-text">
+            Challenge a friend or test your skills against AI
+          </p>
         </div>
+
+        <ThemeSwitcher />
 
         <div className="flex gap-3 justify-center flex-wrap">
           <button
@@ -107,9 +132,10 @@ export const Game = () => {
               px-6 py-3 rounded-lg font-semibold
               flex items-center gap-2
               transition-all duration-200
-              ${gameMode === 'pvp'
-                ? 'bg-blue-600 text-white shadow-lg scale-105'
-                : 'bg-white text-slate-700 border-2 border-slate-300 hover:border-blue-400'
+              ${
+                gameMode === 'pvp'
+                  ? 'bg-primary text-white shadow-lg scale-105'
+                  : 'bg-surface text-primary-text border-2 border-board-border hover:border-primary'
               }
             `}
           >
@@ -123,9 +149,10 @@ export const Game = () => {
               px-6 py-3 rounded-lg font-semibold
               flex items-center gap-2
               transition-all duration-200
-              ${gameMode === 'ai'
-                ? 'bg-rose-600 text-white shadow-lg scale-105'
-                : 'bg-white text-slate-700 border-2 border-slate-300 hover:border-rose-400'
+              ${
+                gameMode === 'ai'
+                  ? 'bg-o-color text-white shadow-lg scale-105'
+                  : 'bg-surface text-primary-text border-2 border-board-border hover:border-o-color'
               }
             `}
           >
@@ -144,9 +171,10 @@ export const Game = () => {
               className={`
                 px-4 py-2 rounded-lg font-medium text-sm
                 transition-all duration-200
-                ${aiDifficulty === 'easy'
-                  ? 'bg-green-600 text-white'
-                  : 'bg-white text-slate-700 border border-slate-300 hover:border-green-400'
+                ${
+                  aiDifficulty === 'easy'
+                    ? 'bg-green-600 text-white'
+                    : 'bg-surface text-primary-text border border-board-border hover:border-green-400'
                 }
               `}
             >
@@ -160,9 +188,10 @@ export const Game = () => {
               className={`
                 px-4 py-2 rounded-lg font-medium text-sm
                 transition-all duration-200
-                ${aiDifficulty === 'hard'
-                  ? 'bg-orange-600 text-white'
-                  : 'bg-white text-slate-700 border border-slate-300 hover:border-orange-400'
+                ${
+                  aiDifficulty === 'hard'
+                    ? 'bg-orange-600 text-white'
+                    : 'bg-surface text-primary-text border border-board-border hover:border-orange-400'
                 }
               `}
             >
@@ -189,8 +218,8 @@ export const Game = () => {
             onClick={resetGame}
             className="
               px-8 py-3 rounded-lg font-semibold
-              bg-slate-700 text-white
-              hover:bg-slate-800
+              bg-secondary text-white
+              hover:bg-opacity-80
               active:scale-95
               transition-all duration-200
               flex items-center gap-2
@@ -200,38 +229,6 @@ export const Game = () => {
             <RotateCcw className="w-5 h-5" />
             New Game
           </button>
-        </div>
-
-        <div className="bg-slate-800 text-slate-100 rounded-xl p-6 space-y-4">
-          <h2 className="text-xl font-bold border-b border-slate-600 pb-2">
-            Open Source Enhancement Ideas
-          </h2>
-          <ul className="space-y-2 text-sm text-slate-300">
-            <li className="flex items-start gap-2">
-              <span className="text-blue-400 font-bold">•</span>
-              <span><strong>Themes:</strong> Add dark mode, color schemes, and custom board styles</span>
-            </li>
-            <li className="flex items-start gap-2">
-              <span className="text-blue-400 font-bold">•</span>
-              <span><strong>Animations:</strong> Smooth transitions for X/O placement and winning celebrations</span>
-            </li>
-            <li className="flex items-start gap-2">
-              <span className="text-blue-400 font-bold">•</span>
-              <span><strong>Multiplayer:</strong> Real-time online play using WebSockets or Supabase Realtime</span>
-            </li>
-            <li className="flex items-start gap-2">
-              <span className="text-blue-400 font-bold">•</span>
-              <span><strong>Leaderboard:</strong> Track wins/losses using Supabase database</span>
-            </li>
-            <li className="flex items-start gap-2">
-              <span className="text-blue-400 font-bold">•</span>
-              <span><strong>Sound Effects:</strong> Audio feedback for moves and game outcomes</span>
-            </li>
-            <li className="flex items-start gap-2">
-              <span className="text-blue-400 font-bold">•</span>
-              <span><strong>Tournament Mode:</strong> Best of 3/5 series with score tracking</span>
-            </li>
-          </ul>
         </div>
       </div>
     </div>

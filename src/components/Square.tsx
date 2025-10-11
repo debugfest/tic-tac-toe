@@ -7,6 +7,8 @@ interface SquareProps {
 }
 
 export const Square = ({ value, onClick, isWinningSquare = false }: SquareProps) => {
+  const textColor = value === 'X' ? 'text-x-color' : 'text-o-color';
+
   return (
     <button
       onClick={onClick}
@@ -14,15 +16,15 @@ export const Square = ({ value, onClick, isWinningSquare = false }: SquareProps)
         w-full h-full aspect-square
         flex items-center justify-center
         text-5xl font-bold
-        bg-white
-        border-2 border-slate-300
+        bg-surface
+        border-2 border-board-border
         rounded-lg
         transition-all duration-200
-        hover:bg-slate-50 hover:border-slate-400
+        hover:bg-opacity-80
         active:scale-95
         disabled:cursor-not-allowed
-        ${isWinningSquare ? 'bg-green-100 border-green-400' : ''}
-        ${value === 'X' ? 'text-blue-600' : 'text-rose-600'}
+        ${isWinningSquare ? 'bg-secondary' : ''}
+        ${textColor}
       `}
       disabled={value !== null}
       aria-label={`Square ${value || 'empty'}`}
