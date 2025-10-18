@@ -13,9 +13,9 @@ export const Status = ({ winner, isDraw, currentPlayer, gameMode }: StatusProps)
     if (winner) {
       return (
         <div className="flex items-center justify-center gap-2">
-          <Trophy className="w-6 h-6 text-yellow-500" />
+          <Trophy className="w-6 h-6 text-secondary" />
           <span className="text-2xl font-bold">
-            Player <span className={winner === 'X' ? 'text-blue-600' : 'text-rose-600'}>{winner}</span> Wins!
+            Player <span className={winner === 'X' ? 'text-x-color' : 'text-o-color'}>{winner}</span> Wins!
           </span>
         </div>
       );
@@ -24,27 +24,27 @@ export const Status = ({ winner, isDraw, currentPlayer, gameMode }: StatusProps)
     if (isDraw) {
       return (
         <div className="flex items-center justify-center gap-2">
-          <Users className="w-6 h-6 text-slate-500" />
-          <span className="text-2xl font-bold text-slate-600">It's a Draw!</span>
+          <Users className="w-6 h-6 text-secondary-text" />
+          <span className="text-2xl font-bold text-secondary-text">It's a Draw!</span>
         </div>
       );
     }
 
     return (
-      <div className="text-xl font-semibold text-slate-700">
+      <div className="text-xl font-semibold text-primary-text">
         Current Player:{' '}
-        <span className={currentPlayer === 'X' ? 'text-blue-600' : 'text-rose-600'}>
+        <span className={currentPlayer === 'X' ? 'text-x-color' : 'text-o-color'}>
           {currentPlayer}
         </span>
         {gameMode === 'ai' && currentPlayer === 'O' && (
-          <span className="text-sm text-slate-500 ml-2">(AI)</span>
+          <span className="text-sm text-secondary-text ml-2">(AI)</span>
         )}
       </div>
     );
   };
 
   return (
-    <div className="w-full max-w-md mx-auto p-6 bg-white rounded-xl shadow-md border-2 border-slate-200">
+    <div className="w-full max-w-md mx-auto p-6 bg-surface rounded-xl shadow-md border-2 border-board-border">
       {getStatusMessage()}
     </div>
   );
