@@ -10,10 +10,11 @@ import {
 } from '../utils/gameLogic';
 import { Board } from './Board';
 import { Status } from './Status';
-import { RotateCcw, Users, Bot } from 'lucide-react';
+import { RotateCcw, Users, Bot, Trophy } from 'lucide-react';
 import { ThemeSwitcher } from './ThemeSwitcher';
+import { TournamentMode } from './TournamentMode';
 
-type GameMode = 'pvp' | 'ai';
+type GameMode = 'pvp' | 'ai' | 'tournament';
 type AIDifficulty = 'easy' | 'hard';
 
 export const Game = () => {
@@ -113,6 +114,11 @@ export const Game = () => {
     resetGame();
   };
 
+  // Render tournament mode
+  if (gameMode === 'tournament') {
+    return <TournamentMode />;
+  }
+
   return (
     <div className="min-h-screen bg-background text-primary-text py-8 px-4 transition-colors duration-300">
       <div className="max-w-2xl mx-auto space-y-6">
@@ -158,6 +164,23 @@ export const Game = () => {
           >
             <Bot className="w-5 h-5" />
             Player vs AI
+          </button>
+
+          <button
+            onClick={() => switchGameMode('tournament')}
+            className={`
+              px-6 py-3 rounded-lg font-semibold
+              flex items-center gap-2
+              transition-all duration-200
+              ${
+                gameMode === 'tournament'
+                  ? 'bg-secondary text-white shadow-lg scale-105'
+                  : 'bg-surface text-primary-text border-2 border-board-border hover:border-secondary'
+              }
+            `}
+          >
+            <Trophy className="w-5 h-5" />
+            Tournament Mode
           </button>
         </div>
 
